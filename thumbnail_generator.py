@@ -13,9 +13,10 @@ class ImageResizer:
 
     def get_img_files(self, in_path):
         files = []
+        extensions = ["jpg", "JPG", "jpeg", "JPEG", "png", "PNG"]
         os.chdir(in_path)
         for file in os.listdir(os.curdir):
-            if file.endswith(".jpg") or file.endswith(".JPG") or file.endswith(".jpeg") or file.endswith(".JPEG"):
+            if file.endswith(tuple(extensions)):
                 files.append([file])
         return files
 
@@ -31,8 +32,7 @@ class ImageResizer:
                        half_w + 75,
                        half_h + 75))
         cr.save('%s%s.jpg' % (in_file.rsplit('.', 1)[0], 't'))
-        # else:
-            # img.save('%s%s.jpg' % (in_file.rsplit('.', 1)[0], 't'))
+        
 
     def get_images(self):
         return self.f_to_resize
@@ -40,7 +40,7 @@ class ImageResizer:
     def __init__(self, in_path):
         self.f_to_resize = self.get_img_files(in_path)
         for file in self.f_to_resize:
-            self.resize_image(file[0], height)
+            self.resize_image(file[0], size)
 
 
 class FTP:
@@ -76,7 +76,7 @@ class FTP:
 
 class HTML:
 
-    IMG_SRC = """<a href='/pics/%s/%s' taget=_blank><img src='/pics/%s/%s'></a>  """
+    IMG_SRC = """<a href='/pics/%s/%s' target=_blank><img src='/pics/%s/%s'></a>  """
 
     def generate(self, files, dir):
         with open('images.txt', 'w') as html:
@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     in_path = args.files_path
-    height = args.height
+    size = args.size
     host = args.host
     storage_dir = args.storage_dir
 
